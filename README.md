@@ -1,4 +1,4 @@
-# School System REST API
+# System REST API
 
 REST API system built with Go and Gin. Designed for high concurrency — stateless JWT auth, PostgreSQL connection pooling, layered clean architecture.
 
