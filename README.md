@@ -1,11 +1,11 @@
 # School System REST API
 
-REST API for a school management system built with Go and Gin. Designed for high concurrency — stateless JWT auth, PostgreSQL connection pooling, layered clean architecture.
+REST API system built with Go and Gin. Designed for high concurrency — stateless JWT auth, PostgreSQL connection pooling, layered clean architecture.
 
 ## Tech Stack
 
 | Component      | Technology       |
-|----------------|------------------|
+| -------------- | ---------------- |
 | Language       | Go 1.21+         |
 | Framework      | Gin Gonic        |
 | Database       | PostgreSQL 16    |
@@ -68,8 +68,8 @@ The server auto-runs database migrations on startup.
 
 ## Environment Variables
 
-| Variable      | Default         | Required | Description                |
-|---------------|-----------------|----------|----------------------------|
+| Variable      | Default         | Required | Description                 |
+| ------------- | --------------- | -------- | --------------------------- |
 | `APP_PORT`    | `8080`          | No       | HTTP server port            |
 | `APP_ENV`     | `development`   | No       | Environment label           |
 | `DB_HOST`     | `localhost`     | No       | PostgreSQL host             |
@@ -96,7 +96,7 @@ All endpoints return a consistent JSON envelope:
 ### Health
 
 | Method | Path             | Auth | Description  |
-|--------|------------------|------|--------------|
+| ------ | ---------------- | ---- | ------------ |
 | GET    | `/api/v1/health` | No   | Health check |
 
 ```bash
@@ -107,7 +107,7 @@ curl http://localhost:8080/api/v1/health
 ### Users
 
 | Method | Path            | Auth | Description     |
-|--------|-----------------|------|-----------------|
+| ------ | --------------- | ---- | --------------- |
 | POST   | `/api/v1/users` | Yes  | Create new user |
 
 **POST /api/v1/users**
@@ -129,19 +129,19 @@ Valid roles: `admin`, `teacher`, `student`, `parent`
 ```json
 // 201 Created
 {
-  "success": true,
-  "data": {
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@school.com",
-    "role": "student",
-    "created_at": "2026-05-10T14:00:00Z"
-  }
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@school.com",
+        "role": "student",
+        "created_at": "2026-05-10T14:00:00Z"
+    }
 }
 ```
 
 | Status | Code               | Reason                   |
-|--------|--------------------|--------------------------|
+| ------ | ------------------ | ------------------------ |
 | 201    | —                  | User created             |
 | 401    | `UNAUTHORIZED`     | Missing or invalid JWT   |
 | 409    | `EMAIL_TAKEN`      | Email already registered |
@@ -169,14 +169,16 @@ Follow this pattern for each new entity (e.g., `Course`):
 3. **Service** — `services/course_service.go` — business logic, request/response types
 4. **Controller** — `controllers/course_controller.go` — HTTP binding + service call
 5. **Routes** — wire in `routes/routes.go`:
-   ```go
-   courseRepo := repositories.NewCourseRepository(db)
-   courseSvc  := services.NewCourseService(courseRepo)
-   courseCtrl := controllers.NewCourseController(courseSvc)
 
-   courses := api.Group("/courses", middlewares.Auth(cfg.JWTSecret))
-   courses.GET("",     courseCtrl.List)
-   courses.POST("",    courseCtrl.Create)
-   courses.GET("/:id", courseCtrl.GetByID)
-   ```
+    ```go
+    courseRepo := repositories.NewCourseRepository(db)
+    courseSvc  := services.NewCourseService(courseRepo)
+    courseCtrl := controllers.NewCourseController(courseSvc)
+
+    courses := api.Group("/courses", middlewares.Auth(cfg.JWTSecret))
+    courses.GET("",     courseCtrl.List)
+    courses.POST("",    courseCtrl.Create)
+    courses.GET("/:id", courseCtrl.GetByID)
+    ```
+
 6. **AutoMigrate** — add `&models.Course{}` to `database/database.go`

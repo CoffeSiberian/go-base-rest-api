@@ -1,4 +1,4 @@
-# Guía Completa del Proyecto: School Management API
+# Guía Completa del Proyecto: Management API
 
 > **Para quién es esto:** Developers que son nuevos en Go y quieren entender este proyecto, agregar módulos nuevos y escalarlo de forma profesional.
 
